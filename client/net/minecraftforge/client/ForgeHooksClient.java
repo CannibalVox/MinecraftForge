@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.TreeSet;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.PixelFormat;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -82,9 +85,10 @@ public class ForgeHooksClient
         boolean is3D = customRenderer.shouldUseRenderHelper(ENTITY, item, BLOCK_3D);
 
         engine.bindTexture(item.getItemSpriteNumber() == 0 ? "/terrain.png" : "/gui/items.png");
-        if (is3D || (item.itemID < Block.blocksList.length && RenderBlocks.renderItemIn3d(Block.blocksList[item.itemID].getRenderType())))
+        Block block = (item.itemID < Block.blocksList.length ? Block.blocksList[item.itemID] : null);
+        if (is3D || (block != null && RenderBlocks.renderItemIn3d(block.getRenderType())))
         {
-            int renderType = (item.itemID < Block.blocksList.length ? Block.blocksList[item.itemID].getRenderType() : 1);
+            int renderType = (block != null ? block.getRenderType() : 1);
             float scale = (renderType == 1 || renderType == 19 || renderType == 12 || renderType == 2 ? 0.5F : 0.25F);
 
             if (RenderItem.renderInFrame)
@@ -97,7 +101,7 @@ public class ForgeHooksClient
             GL11.glScalef(scale, scale, scale);
             
             int size = item.stackSize;
-            int count = (size > 20 ? 4 : (size > 5 ? 3 : (size > 1 ? 2 : 1)));
+            int count = (size > 40 ? 5 : (size > 20 ? 4 : (size > 5 ? 3 : (size > 1 ? 2 : 1))));
 
             for(int j = 0; j < count; j++)
             {
@@ -105,9 +109,9 @@ public class ForgeHooksClient
                 if (j > 0)
                 {
                     GL11.glTranslatef(
-                        ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / 0.5F,
-                        ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / 0.5F,
-                        ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / 0.5F);
+                        ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / scale,
+                        ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / scale,
+                        ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / scale);
                 }
                 customRenderer.renderItem(ENTITY, item, renderBlocks, entity);
                 GL11.glPopMatrix();
@@ -283,5 +287,22 @@ public class ForgeHooksClient
     {
         ModelBiped modelbiped = itemStack.getItem().getArmorModel(entityLiving, itemStack, slotID);
         return modelbiped == null ? _default : modelbiped;
+    }
+
+    static int stencilBits = 0;
+    public static void createDisplay() throws LWJGLException
+    {
+        PixelFormat format = new PixelFormat().withDepthBits(24);
+        try
+        {
+            //TODO: Figure out how to determine the max bits.
+            Display.create(format.withStencilBits(8));
+            stencilBits = 8;
+        }
+        catch(LWJGLException e)
+        {
+            Display.create(format);
+            stencilBits = 0;
+        }
     }
 }
