@@ -87,7 +87,7 @@
                      GL11.glEnable(GL11.GL_ALPHA_TEST);
                  }
              }
-@@ -1166,7 +1175,11 @@
+@@ -1166,7 +1167,11 @@
              GL11.glDisable(GL11.GL_BLEND);
              GL11.glEnable(GL11.GL_CULL_FACE);
              GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -100,7 +100,7 @@
              this.setupFog(0, par1);
              GL11.glEnable(GL11.GL_BLEND);
              GL11.glDisable(GL11.GL_CULL_FACE);
-@@ -1181,9 +1194,11 @@
+@@ -1181,9 +1186,11 @@
                      GL11.glShadeModel(GL11.GL_SMOOTH);
                  }
  
@@ -115,7 +115,7 @@
                  if (this.mc.gameSettings.anaglyph)
                  {
                      if (anaglyphField == 0)
-@@ -1194,15 +1209,12 @@
+@@ -1194,15 +1201,12 @@
                      {
                          GL11.glColorMask(true, false, false, true);
                      }

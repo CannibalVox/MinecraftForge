@@ -183,7 +183,7 @@
 +        //Priority queues are great because they implement the heapsort algorithm, which has a common case of
 +        //nlog(n) and extremely reasonable memory requirements.  We use the TriComparator class to actually
 +        //sort the quads.
-+        PriorityQueue<Integer> queue = new PriorityQueue<Integer>(this.rawBuffer.length, new TriComparator(this.rawBuffer, playerX + (float)this.xOffset, playerY + (float)this.yOffset, playerZ + (float)this.zOffset));
++        PriorityQueue<Integer> queue = new PriorityQueue<Integer>(this.rawBuffer.length, new TriComparator(this.rawBuffer, playerX + (float)this.xOffset, playerY + (float)this.yOffset, playerZ + (float)this.zOffset, this.convertQuadsToTriangles));
 +
 +        int span = 32;
 +        if (this.convertQuadsToTriangles)
