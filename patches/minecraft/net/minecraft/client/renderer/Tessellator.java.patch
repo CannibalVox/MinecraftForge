@@ -157,7 +157,7 @@
              }
  
              int i = this.rawBufferIndex * 4;
-@@ -435,6 +467,80 @@
+@@ -435,6 +467,83 @@
          this.setTextureUV(par7, par9);
          this.addVertex(par1, par3, par5);
      }
@@ -177,6 +177,9 @@
 +     */
 +    public TessellatorState sortQuads(float playerX, float playerY, float playerZ)
 +    {
++        if (rawBuffer == null)
++            return null;
++        
 +        //We need a cloned-off copy of the raw buffer, because the draw() method jacks with the internal rawBuffer
 +        //and we want to be able to restore the buffer later.
 +        int[] newBuffer = new int[this.rawBuffer.length];
@@ -238,7 +241,7 @@
  
      /**
       * Adds a vertex with the specified x,y,z to the current draw call. It will trigger a draw() if the buffer gets
-@@ -442,6 +548,19 @@
+@@ -442,6 +551,19 @@
       */
      public void addVertex(double par1, double par3, double par5)
      {
@@ -258,7 +261,7 @@
          ++this.addedVertices;
  
          if (this.drawMode == 7 && convertQuadsToTriangles && this.addedVertices % 4 == 0)
-@@ -500,12 +619,6 @@
+@@ -500,12 +622,6 @@
          this.rawBuffer[this.rawBufferIndex + 2] = Float.floatToRawIntBits((float)(par5 + this.zOffset));
          this.rawBufferIndex += 8;
          ++this.vertexCount;
